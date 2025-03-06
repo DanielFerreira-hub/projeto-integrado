@@ -1,2 +1,1 @@
-# projeto-integrado
-Projeto final de curso onde crio um parque informático para ISLA Gaia usando no front-end React, back-end Laravel,  database litesql
+This is the main document of the repository, providing an overview of the project and the technologies used.
