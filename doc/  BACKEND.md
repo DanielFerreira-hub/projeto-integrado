@@ -1,7 +1,22 @@
-📌 Objetivo: Explicar como o Laravel está estruturado.
+# Back-end Development Guide
 
-📜 Conteúdo:
+## Objective
+Explain how the Laravel back-end is structured.
 
-    Estrutura de pastas do Laravel (Controllers, Models, Migrations, etc.)
-    Middleware e autenticação
-    Como estão organizadas as rotas
+## Folder Structure
+Description of the folder structure of the Laravel project.
+
+## Routes
+Details about defining routes in Laravel.
+
+## Controllers
+Guide on creating and using controllers.
+
+## Models
+How to define and use models in Laravel.
+
+## Middleware and Authentication
+Implementing middleware and authentication in Laravel.
+
+## Database Integration
+How to integrate the back-end with the MariaDB/MySQL database.
