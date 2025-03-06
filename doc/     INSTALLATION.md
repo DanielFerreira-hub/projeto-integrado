@@ -1,15 +1,15 @@
-## Project: ISLA IT Asset Management
+# Project: ISLA IT Asset Management
 
-### Description
+## Description
 This project is a web-based system for managing the IT assets of ISLA-IPGT. It allows users to track hardware, software, and educational equipment efficiently.
 
-### Technologies Used
+## Technologies Used
 - **Frontend:** React.js
 - **Backend:** Laravel
 - **Database:** MariaDB/MySQL
 - **Tools:** Insomnia (API testing), Beekeeper/DBeaver (Database management)
 
-### Repository Structure
+## Repository Structure
 - `/docs` - Documentation files
 - `/frontend` - React.js application
 - `/backend` - Laravel API
@@ -30,8 +30,8 @@ Ensure you have the following installed:
 ### Backend Setup
 1. Clone the repository:  
    ```bash
-   git clone <repository-url>
-   cd backend
+   git clone https://github.com/DanielFerreira-hub/projeto-integrado.git
+   cd projeto-integrado/backend
    ```
 2. Install dependencies:  
    ```bash
@@ -41,7 +41,15 @@ Ensure you have the following installed:
    ```bash
    cp .env.example .env
    ```
-   - Configure database credentials in `.env`.
+   - Configure database credentials in `.env`:
+     ```dotenv
+     DB_CONNECTION=mysql
+     DB_HOST=127.0.0.1
+     DB_PORT=3306
+     DB_DATABASE=your_database_name
+     DB_USERNAME=your_database_user
+     DB_PASSWORD=your_database_password
+     ```
 4. Run migrations and seed the database:  
    ```bash
    php artisan migrate --seed
@@ -62,7 +70,10 @@ Ensure you have the following installed:
    ```
 3. Start the React development server:  
    ```bash
-   npm run dev
+   npm start
    ```
 
 Your application should now be running!
+
+- **Backend:** Open your browser and go to `http://localhost:8000`
+- **Frontend:** Open your browser and go to `http://localhost:3000`
