@@ -1,7 +1,19 @@
-📌 Objetivo: Explicar a organização do código React.
+# Front-end Development Guide
 
-📜 Conteúdo:
+## Objective
+Explain the organization of the React code.
 
-    Estrutura de pastas (src/components, src/pages, etc.)
-    Como funciona a gestão do estado (Context API, Redux, etc.)
-    Explicação sobre os principais componentes
+## Folder Structure
+Description of the folder structure of the React project.
+
+## State Management
+How to manage state using Context API, Redux, etc.
+
+## Main Components
+Explanation of the main components and how to use them.
+
+## Styles
+Guide on using styles in the project.
+
+## API Integration
+How to integrate the front-end with the developed APIs.
