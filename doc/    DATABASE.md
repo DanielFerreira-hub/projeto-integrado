@@ -1,38 +1,52 @@
 # Database Structure
 
 ## Objective
-Define tables, relationships, and database schema.
+Define tables, relationships, and database schema for managing the assets of the ISLA-IPGT Informatics Park (hardware, software, and educational equipment), accessible via a browser in the back office.
 
 ## Tables and Columns
 
-### `hardware` Table
+### `users` Table
 - **ID:** Unique identifier
-- **Name:** Hardware name
-- **Description:** Hardware description
-- **Quantity:** Available quantity
+- **Name:** User name
+- **Email:** User email (unique)
+- **Password:** User password
+- **Created_at:** Record creation date
+- **Updated_at:** Record update date
 
-### `software` Table
+### `assets` Table
 - **ID:** Unique identifier
-- **Name:** Software name
-- **Description:** Software description
-- **Version:** Software version
+- **Name:** Asset name
+- **Category_id:** Identifier of the asset category (foreign key to `categories`)
+- **Description:** Asset description
+- **Created_at:** Record creation date
+- **Updated_at:** Record update date
 
-### `educational_equipment` Table
+### `categories` Table
 - **ID:** Unique identifier
-- **Name:** Equipment name
-- **Description:** Equipment description
-- **Quantity:** Available quantity
+- **Name:** Category name
+- **Created_at:** Record creation date
+- **Updated_at:** Record update date
+
+### `assignments` Table
+- **ID:** Unique identifier
+- **User_id:** Identifier of the user (foreign key to `users`)
+- **Asset_id:** Identifier of the asset (foreign key to `assets`)
+- **Assigned_at:** Assignment date
+- **Created_at:** Record creation date
+- **Updated_at:** Record update date
 
 ## Relationships
-- **1:N:** One-to-many relationship between tables.
-- **N:M:** Many-to-many relationship between tables.
+- **1:N:** One-to-many relationship between `categories` and `assets` (one category has many assets).
+- **1:N:** One-to-many relationship between `users` and `assignments` (one user can have many assignments).
+- **1:N:** One-to-many relationship between `assets` and `assignments` (one asset can have many assignments).
 
 ## Database Diagram
 (Include ER diagram here or provide a link to the diagram created using tools like dbdiagram.io)
 
 ## Example of Initial Records (Seeds)
 ```sql
-INSERT INTO hardware (name, description, quantity) VALUES ('Laptop', 'Dell XPS 15', 10);
-INSERT INTO software (name, description, version) VALUES ('Windows 10', 'Operating System', '10.0');
-INSERT INTO educational_equipment (name, description, quantity) VALUES ('Projector', 'Epson Projector', 5);
+INSERT INTO users (name, email, password) VALUES ('Admin', 'admin@example.com', 'hashed_password');
+INSERT INTO categories (name) VALUES ('Hardware'), ('Software'), ('Educational Equipment');
+INSERT INTO assets (name, category_id, description) VALUES ('Laptop', 1, 'Dell XPS 15'), ('Windows 10', 2, 'Operating System'), ('Projector', 3, 'Epson Projector');
+INSERT INTO assignments (user_id, asset_id, assigned_at) VALUES (1, 1, '2025-03-12 15:00:00'), (1, 2, '2025-03-12 15:00:00'), (1, 3, '2025-03-12 15:00:00');
 ```
