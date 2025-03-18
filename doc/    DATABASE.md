@@ -31,6 +31,9 @@ Define tables, relationships, and database schema for managing the assets of the
 - **Category_id:** Identifier of the asset category (foreign key to `categories`)
 - **Description:** Asset description
 - **Status:** Asset status (e.g., available, in use, under maintenance)
+- **Room_id:** Identifier of the room where the asset is located (foreign key to `rooms`)
+- **Supplier_id:** Identifier of the supplier of the asset (foreign key to `suppliers`)
+- **Purchase_date:** Purchase date of the asset
 - **Created_at:** Record creation date
 - **Updated_at:** Record update date
 
@@ -57,11 +60,34 @@ Define tables, relationships, and database schema for managing the assets of the
 - **Created_at:** Record creation date
 - **Updated_at:** Record update date
 
+### `locations` Table
+- **ID:** Unique identifier
+- **Name:** Location name
+- **Created_at:** Record creation date
+- **Updated_at:** Record update date
+
+### `suppliers` Table
+- **ID:** Unique identifier
+- **Name:** Supplier name
+- **Contact_info:** Supplier contact information
+- **Created_at:** Record creation date
+- **Updated_at:** Record update date
+
+### `rooms` Table
+- **ID:** Unique identifier
+- **Name:** Room name
+- **Location_id:** Identifier of the location (foreign key to `locations`)
+- **Created_at:** Record creation date
+- **Updated_at:** Record update date
+
 ## Relationships
 - **1:N:** One-to-many relationship between `categories` and `assets` (one category has many assets).
 - **1:N:** One-to-many relationship between `users` and `assignments` (one user can have many assignments).
 - **1:N:** One-to-many relationship between `assets` and `assignments` (one asset can have many assignments).
 - **1:N:** One-to-many relationship between `assets` and `maintenance_logs` (one asset can have many maintenance logs).
+- **1:N:** One-to-many relationship between `locations` and `rooms` (one location has many rooms).
+- **1:N:** One-to-many relationship between `rooms` and `assets` (one room has many assets).
+- **1:N:** One-to-many relationship between `assets` and `suppliers` (one supplier provides many assets).
 - **N:M:** Many-to-many relationship between `users` and `roles` (through `user_roles`).
 
 ## Database Diagram
@@ -73,6 +99,9 @@ INSERT INTO users (name, email, password) VALUES ('Admin', 'admin@example.com', 
 INSERT INTO roles (name) VALUES ('Admin'), ('User');
 INSERT INTO user_roles (user_id, role_id) VALUES (1, 1);
 INSERT INTO categories (name) VALUES ('Hardware'), ('Software'), ('Educational Equipment');
-INSERT INTO assets (name, category_id, description, status) VALUES ('Laptop', 1, 'Dell XPS 15', 'available'), ('Windows 10', 2, 'Operating System', 'available'), ('Projector', 3, 'Epson Projector', 'available');
-INSERT INTO assignments (user_id, asset_id, assigned_at) VALUES (1, 1, '2025-03-12 15:00:00'), (1, 2, '2025-03-12 15:00:00'), (1, 3, '2025-03-12 15:00:00');
+INSERT INTO locations (name) VALUES ('Main Building'), ('Annex Building');
+INSERT INTO suppliers (name, contact_info) VALUES ('Dell', 'dell@example.com'), ('Microsoft', 'microsoft@example.com');
+INSERT INTO rooms (name, location_id) VALUES ('Room 101', 1), ('Room 102', 1), ('Room 201', 2);
+INSERT INTO assets (name, category_id, description, status, room_id, supplier_id, purchase_date) VALUES ('Laptop', 1, 'Dell XPS 15', 'available', 1, 1, '2025-01-15'), ('Windows 10', 2, 'Operating System', 'available', 1, 2, '2025-01-15'), ('Projector', 3, 'Epson Projector', 'available', 2, 1, '2025-01-15');
+INSERT INTO assignments (user_id, asset_id, assigned_at) VALUES (1, 1, '2025-03-12'), (1, 2, '2025-03-12'), (1, 3, '2025-03-12');
 ```
