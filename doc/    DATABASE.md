@@ -5,90 +5,80 @@ Define tables, relationships, and database schema for managing the assets of the
 
 ## Tables and Columns
 
-users {
-	created_at timestamp
-	updated_at timestamp
-	id int pk increments
-	email varchar(255) unique
-	name varchar(255)
-	password varchar(255)
-}
+### `users` Table
+- **ID:** Unique identifier
+- **Name:** User name
+- **Email:** User email (unique)
+- **Password:** User password
+- **Created_at:** Record creation date
+- **Updated_at:** Record update date
 
-roles {
-	id int pk increments
-	name varchar(255)
-	created_at timestamp
-	updated_at timestamp
-}
+### `roles` Table
+- **ID:** Unique identifier
+- **Name:** Role name (e.g., Admin, User)
+- **Created_at:** Record creation date
+- **Updated_at:** Record update date
 
-user_roles {
-	user_id int > users.id
-	role_id int > roles.id
-	created_at timestamp
-	updated_at timestamp
-}
+### `user_roles` Table
+- **User_id:** Identifier of the user (foreign key to `users`)
+- **Role_id:** Identifier of the role (foreign key to `roles`)
+- **Created_at:** Record creation date
+- **Updated_at:** Record update date
 
-assets {
-	id int pk increments
-	name varchar(255)
-	category_id int > categories.id
-	description varchar(255)
-	status varchar(50)
-	room_id int > rooms.id
-	supplier_id int > suppliers.id
-	purchase_date date
-	created_at timestamp
-	updated_at timestamp
-}
+### `assets` Table
+- **ID:** Unique identifier
+- **Name:** Asset name
+- **Category_id:** Identifier of the asset category (foreign key to `categories`)
+- **Description:** Asset description
+- **Status:** Asset status (e.g., available, in use, under maintenance)
+- **Room_id:** Identifier of the room where the asset is located (foreign key to `rooms`)
+- **Supplier_id:** Identifier of the supplier of the asset (foreign key to `suppliers`)
+- **Purchase_date:** Purchase date of the asset
+- **Created_at:** Record creation date
+- **Updated_at:** Record update date
 
-categories {
-	id int pk increments
-	name varchar(255) unique
-	created_at timestamp
-	updated_at timestamp
-}
+### `categories` Table
+- **ID:** Unique identifier
+- **Name:** Category name
+- **Created_at:** Record creation date
+- **Updated_at:** Record update date
 
-assignments {
-	id int pk increments
-	user_id int > users.id
-	asset_id int > assets.id
-	assigned_at date
-	returned_at date
-	created_at timestamp
-	updated_at timestamp
-}
+### `assignments` Table
+- **ID:** Unique identifier
+- **User_id:** Identifier of the user (foreign key to `users`)
+- **Asset_id:** Identifier of the asset (foreign key to `assets`)
+- **Assigned_at:** Assignment date
+- **Returned_at:** Return date (nullable)
+- **Created_at:** Record creation date
+- **Updated_at:** Record update date
 
-maintenance_logs {
-	id int pk increments
-	asset_id int > assets.id
-	description text
-	performed_at date
-	created_at timestamp
-	updated_at timestamp
-}
+### `maintenance_logs` Table
+- **ID:** Unique identifier
+- **Asset_id:** Identifier of the asset (foreign key to `assets`)
+- **Description:** Description of the maintenance performed
+- **Performed_at:** Date when the maintenance was performed
+- **Created_at:** Record creation date
+- **Updated_at:** Record update date
 
-locations {
-	id int pk increments
-	name varchar(255)
-	created_at timestamp
-	updated_at timestamp
-}
+### `locations` Table
+- **ID:** Unique identifier
+- **Name:** Location name
+- **Created_at:** Record creation date
+- **Updated_at:** Record update date
 
-suppliers {
-	id int pk increments
-	name varchar(255)
-	contact_info varchar(255)
-	created_at timestamp
-	updated_at timestamp
-}
+### `suppliers` Table
+- **ID:** Unique identifier
+- **Name:** Supplier name
+- **Contact_info:** Supplier contact information
+- **Created_at:** Record creation date
+- **Updated_at:** Record update date
 
-rooms {
-	id int pk increments
-	name varchar(255)
-	location_id int > locations.id
-	created_at timestamp
-	updated_at timestamp
-}
+### `rooms` Table
+- **ID:** Unique identifier
+- **Name:** Room name
+- **Location_id:** Identifier of the location (foreign key to `locations`)
+- **Created_at:** Record creation date
+- **Updated_at:** Record update date
 
 ## Relationships
 - **1:N:** One-to-many relationship between `categories` and `assets` (one category has many assets).
