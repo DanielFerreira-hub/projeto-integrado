@@ -10,20 +10,14 @@ Define tables, relationships, and database schema for managing the assets of the
 - **Name:** User name
 - **Email:** User email (unique)
 - **Password:** User password
+- **Department:** User department
+- **Role_id:** Identifier of the role (foreign key to `roles`)
 - **Created_at:** Record creation date
 - **Updated_at:** Record update date
 
 ### `roles` Table
 - **ID:** Unique identifier
 - **Name:** Role name (e.g., Admin, User)
-- **Created_at:** Record creation date
-- **Updated_at:** Record update date
-
-### `user_roles` Table
-- **User_id:** Identifier of the user (foreign key to `users`)
-- **Role_id:** Identifier of the role (foreign key to `roles`)
-- **Created_at:** Record creation date
-- **Updated_at:** Record update date
 
 ### `assets` Table
 - **ID:** Unique identifier
@@ -81,6 +75,7 @@ Define tables, relationships, and database schema for managing the assets of the
 - **Updated_at:** Record update date
 
 ## Relationships
+- **1:N:** One-to-many relationship between `roles` and `users` (one role has many users).
 - **1:N:** One-to-many relationship between `categories` and `assets` (one category has many assets).
 - **1:N:** One-to-many relationship between `users` and `assignments` (one user can have many assignments).
 - **1:N:** One-to-many relationship between `assets` and `assignments` (one asset can have many assignments).
@@ -88,16 +83,14 @@ Define tables, relationships, and database schema for managing the assets of the
 - **1:N:** One-to-many relationship between `locations` and `rooms` (one location has many rooms).
 - **1:N:** One-to-many relationship between `rooms` and `assets` (one room has many assets).
 - **1:N:** One-to-many relationship between `assets` and `suppliers` (one supplier provides many assets).
-- **N:M:** Many-to-many relationship between `users` and `roles` (through `user_roles`).
 
 ## Database Diagram
 (Include ER diagram here or provide a link to the diagram created using tools like dbdiagram.io)
 
 ## Example of Initial Records (Seeds)
 ```sql
-INSERT INTO users (name, email, password) VALUES ('Admin', 'admin@example.com', 'hashed_password');
+INSERT INTO users (name, email, password, department, role_id) VALUES ('Admin', 'admin@example.com', 'hashed_password', 'IT', 1);
 INSERT INTO roles (name) VALUES ('Admin'), ('User');
-INSERT INTO user_roles (user_id, role_id) VALUES (1, 1);
 INSERT INTO categories (name) VALUES ('Hardware'), ('Software'), ('Educational Equipment');
 INSERT INTO locations (name) VALUES ('Main Building'), ('Annex Building');
 INSERT INTO suppliers (name, contact_info) VALUES ('Dell', 'dell@example.com'), ('Microsoft', 'microsoft@example.com');
