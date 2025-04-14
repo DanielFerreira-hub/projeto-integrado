@@ -85,7 +85,7 @@ Define tables, relationships, and database schema for managing the assets of the
 - **1:N:** One-to-many relationship between `assets` and `suppliers` (one supplier provides many assets).
 
 ## Database Diagram
-(Include ER diagram here or provide a link to the diagram created using tools like dbdiagram.io)
+[ER diagram using tools dbdiagram.io](https://dbdesigner.page.link/bXdebvYN9KBrwaUF6)
 
 ## Example of Initial Records (Seeds)
 ```sql
