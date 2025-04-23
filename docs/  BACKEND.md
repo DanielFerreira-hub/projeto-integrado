@@ -120,9 +120,9 @@ The back-end uses MariaDB/MySQL as the database. Follow these steps to integrate
    DB_CONNECTION=mysql
    DB_HOST=127.0.0.1
    DB_PORT=3307
-   DB_DATABASE=projeto_integrado_db
-   DB_USERNAME=projeto_user
-   DB_PASSWORD=secure_password
+   DB_DATABASE=parque_informatico
+   DB_USERNAME=admin
+   DB_PASSWORD=1234
    ```
 2. Run migrations to set up database tables:
    ```bash
