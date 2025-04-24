@@ -1,16 +1,31 @@
 # Terminal Commands to Generate Factories
 
-1. Role Factory
+1. User Factory
 ```bash
-php artisan make:factory RoleFactory --model=Role
+php artisan make:factory UserFactory --model=User
 ```
 
-2. Category Factory
+2. Asset Factory
 ```bash
-php artisan make:factory CategoryFactory --model=Category
+php artisan make:factory AssetFactory --model=Asset
 ```
 
-3. Room Factory
+3. Location Factory
 ```bash
-php artisan make:factory RoomFactory --model=Room
+php artisan make:factory LocationFactory --model=Location
+```
+
+4. Supplier Factory
+```bash
+php artisan make:factory SupplierFactory --model=Supplier
+```
+
+5. Assignment Factory
+```bash
+php artisan make:factory AssignmentFactory --model=Assignment
+```
+
+6. MaintenanceLog Factory
+```bash
+php artisan make:factory MaintenanceLogFactory --model=MaintenanceLog
 ```
