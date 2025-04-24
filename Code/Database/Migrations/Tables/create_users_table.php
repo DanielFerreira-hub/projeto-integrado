@@ -13,9 +13,9 @@ class CreateUsersTable extends Migration
             $table->string('name');
             $table->string('email')->unique();
             $table->string('password');
-            $table->string('department')->nullable();
-            $table->foreignId('role_id')->constrained('roles');
-            $table->timestamps();
+            $table->string('department')->nullable(); // Nullable department field
+            $table->foreignId('role_id')->constrained('roles'); // Foreign key to roles table
+            $table->timestamps(); // Created at and updated at timestamps
         });
     }
 
