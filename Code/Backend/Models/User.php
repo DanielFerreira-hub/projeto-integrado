@@ -13,6 +13,7 @@ class User extends Model
         'name',
         'email',
         'password',
+        'role_id',
     ];
 
     protected $hidden = [
