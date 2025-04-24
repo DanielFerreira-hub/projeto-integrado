@@ -9,12 +9,12 @@ class RoleController extends Controller
 {
     public function getAll()
     {
-        return response()->json(Role::all());
+        return response()->json(Role::with('users')->get()); // Include associated users
     }
 
     public function getById($id)
     {
-        $role = Role::find($id);
+        $role = Role::with('users')->find($id); // Include associated users
         if (!$role) {
             return response()->json(['error' => 'Role not found'], 404);
         }
