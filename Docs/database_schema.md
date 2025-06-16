@@ -1,11 +1,23 @@
 # ISLA IT Asset Management – Database Schema
 
-## Entity-Relationship Diagram
+## General Structure
 
-[*![imagem](https://github.com/user-attachments/assets/55b6352f-7b34-4fb0-bea1-2582a438e74b)
-*](https://drawsql.app/teams/daniel-198/diagrams/isla-it-asset-management)
+- **users, roles:** user management and access control.
+- **locations:** physical locations for assets.
+- **hardware_equipment:** computers, printers, etc.
+- **software_equipment:** software, licenses, etc.
+- **didactic_equipment:** didactic (educational) equipment (e.g., projectors, kits).
+- **maintenance_logs:** maintenance records for any asset.
+- **Attachments (photos, documents):** stored as fields (`photo_url`, `document_url`) in the equipment tables.
 
-## Tables & Fields
+## Relationships
+
+- A user has a role (**role_id** in **users**).
+- Hardware and didactic equipment have a location (**location_id**).
+- Software can be assigned to a hardware equipment (**assigned_to_hardware_id**).
+- Maintenance log points to the responsible user, the equipment, and the type of equipment.
+
+## Tables & Main Fields
 
 ### users
 - id (PK)
@@ -19,10 +31,14 @@
 - id (PK)
 - name
 
-### equipment
+### locations
 - id (PK)
 - name
-- equipment_type_id (FK → equipment_types.id)
+- description
+
+### hardware_equipment
+- id (PK)
+- name
 - serial_number
 - brand
 - model
@@ -31,65 +47,56 @@
 - purchase_date
 - warranty_expiration
 - notes
+- photo_url
+- document_url
 - created_at, updated_at
 
-### equipment_types
+### software_equipment
 - id (PK)
 - name
-- description
+- version
+- vendor
+- license_key
+- valid_until
+- assigned_to_hardware_id (FK → hardware_equipment.id, nullable)
+- notes
+- photo_url
+- document_url
+- created_at, updated_at
 
-### locations
+### didactic_equipment
 - id (PK)
 - name
-- description
+- type
+- serial_number
+- location_id (FK → locations.id)
+- status
+- purchase_date
+- notes
+- photo_url
+- document_url
+- created_at, updated_at
 
 ### maintenance_logs
 - id (PK)
-- equipment_id (FK → equipment.id)
+- equipment_type (hardware, software, didactic)
+- equipment_id (corresponding id)
 - user_id (FK → users.id)
 - maintenance_date
 - description
 - type (preventive, corrective)
 - created_at
 
-### licenses
-- id (PK)
-- name
-- license_key
-- valid_until
-- equipment_id (FK → equipment.id)
-- notes
-- created_at
+---
 
-### attachments
-- id (PK)
-- equipment_id (FK → equipment.id)
-- filename
-- file_url
-- uploaded_at
+## Notes
 
-### software
-- id (PK)
-- name
-- version
-- vendor
-- license_required
-- created_at
+- **Attachments** (such as photos or documents) are stored as URLs in the fields `photo_url` and `document_url` within the equipment tables, not in a separate table.
+- **Maintenance logs** are generic and can be linked to any type of equipment by specifying both the equipment type and the equipment id.
+- **software_equipment.assigned_to_hardware_id** can be `null` if not assigned to a particular hardware.
 
-### equipment_software
-- id (PK)
-- equipment_id (FK → equipment.id)
-- software_id (FK → software.id)
-- installed_at
+---
 
-## Relationships
+## Entity-Relationship Diagram
 
-- **users.role_id** → **roles.id**
-- **equipment.equipment_type_id** → **equipment_types.id**
-- **equipment.location_id** → **locations.id**
-- **maintenance_logs.equipment_id** → **equipment.id**
-- **maintenance_logs.user_id** → **users.id**
-- **licenses.equipment_id** → **equipment.id**
-- **attachments.equipment_id** → **equipment.id**
-- **equipment_software.equipment_id** → **equipment.id**
-- **equipment_software.software_id** → **software.id**
+*Insert your exported drawSQL diagram image here!*
