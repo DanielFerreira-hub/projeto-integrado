@@ -2,7 +2,8 @@
 
 ## Entity-Relationship Diagram
 
-[*Insert your exported drawSQL diagram image here!*](https://drawsql.app/teams/daniel-198/diagrams/isla-it-asset-management)
+[*![imagem](https://github.com/user-attachments/assets/55b6352f-7b34-4fb0-bea1-2582a438e74b)
+*](https://drawsql.app/teams/daniel-198/diagrams/isla-it-asset-management)
 
 ## Tables & Fields
 
