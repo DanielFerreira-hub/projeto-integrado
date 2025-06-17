@@ -1,271 +1,261 @@
-# ISLA IT Asset Management – Complete Database Schema
+# ISLA IT Asset Management – Database Schema Documentation
 
-## Overview
-
-This document describes the complete database schema for a robust IT asset management system suitable for educational institutions (schools, universities, etc.). The system is designed to handle hardware, software, didactic assets, users, maintenance, suppliers, warranties, and more, with a focus on flexibility, traceability, and professional practices.
+This document describes the proposed database schema for the ISLA IT Asset Management system. It explains each table, its columns, and provides example values for each column. This schema is designed for clarity, normalization, and extensibility.
 
 ---
 
-## Main Entities
+## 1. users
 
-### Users and Permissions
-
-- **users**: Stores all users (admins, technicians, teachers, etc.), including access credentials, role, and department.
-- **roles**: Defines user roles/permissions (admin, technician, etc.).
-- **departments**: (Optional) For grouping users and assets by department, course, or sector.
-
-### Locations and Suppliers
-
-- **locations**: Physical locations of assets (labs, rooms, buildings), optionally linked to a department.
-- **suppliers**: Information about companies or people supplying assets or warranties.
-
-### Assets
-
-- **hardware_assets**: All IT hardware—computers, switches, printers, etc.—with inventory/tag, warranty, supplier, and location.
-- **software_assets**: Licenses, applications, or systems, with version, license key, supplier, and assignment to hardware (optional).
-- **didactic_assets**: Didactic or educational equipment—projectors, boards, laboratory kits, etc.
-
-### Supporting Tables
-
-- **asset_tags**: Unique inventory codes/tags (e.g., QR code or sticker) for tracking any asset.
-- **warranties**: Warranty details for any asset, with supplier and digital copy.
-- **asset_photos**: Photos or documents attached to any asset—can be images, PDF invoices, etc.
-
-### Maintenance and Tracking
-
-- **maintenance_logs**: Maintenance or repair records for any asset, with history and responsible technician.
-- **asset_assignments**: Tracks to whom or where a given asset is assigned (for example, “Laptop X is with Teacher Y in Room 103”).
-- **logs**: System activity logs for auditing.
-- **notifications**: Alerts for users (e.g., maintenance due, warranty expiring).
+| Column       | Type    | Description                        | Example                |
+|--------------|---------|------------------------------------|------------------------|
+| id           | int     | Primary key, auto-increment        | 1                      |
+| name         | string  | Full name of the user              | "Alice Smith"          |
+| email        | string  | User's email address (unique)      | "alice@isla.pt"        |
+| password     | string  | Password hash                      | "$2y$10$abc..."        |
+| role_id      | int     | Foreign Key to roles.id            | 2                      |
+| created_at   | datetime| Record creation timestamp          | "2025-06-17 10:15:00"  |
+| updated_at   | datetime| Last update timestamp              | "2025-06-17 10:15:00"  |
 
 ---
 
-## Table Structure
+## 2. roles
 
-### 1. Users, Roles, Departments
+| Column | Type   | Description            | Example     |
+|--------|--------|------------------------|-------------|
+| id     | int    | Primary key            | 1           |
+| name   | string | Role name              | "admin"     |
 
-| Table         | Description                                  |
-|---------------|----------------------------------------------|
-| users         | All users of the system                      |
-| roles         | User role (admin, technician, etc.)          |
-| departments   | Optional, for grouping users/assets          |
+---
+
+## 3. locations
+
+| Column     | Type   | Description                 | Example          |
+|------------|--------|-----------------------------|------------------|
+| id         | int    | Primary key                 | 1                |
+| name       | string | Room or location name       | "Lab 1.01"       |
+| description| string | Additional details          | "Computer lab"   |
+
+---
+
+## 4. statuses
+
+| Column | Type   | Description                    | Example         |
+|--------|--------|--------------------------------|-----------------|
+| id     | int    | Primary key                    | 1               |
+| name   | string | Status of asset                | "in use"        |
+
+Typical status values: "in use", "in stock", "maintenance", "retired", "lost".
+
+---
+
+## 5. hardware_assets
+
+| Column        | Type    | Description                                      | Example            |
+|---------------|---------|--------------------------------------------------|--------------------|
+| id            | int     | Primary key                                      | 1                  |
+| name          | string  | Asset name                                       | "PC - Front Desk"  |
+| type          | string  | Hardware type                                    | "Desktop"          |
+| brand         | string  | Brand/manufacturer                               | "Dell"             |
+| model         | string  | Model                                            | "OptiPlex 3080"    |
+| serial_number | string  | Serial number                                    | "SN12345678"       |
+| location_id   | int     | FK to locations.id                               | 1                  |
+| status_id     | int     | FK to statuses.id                                | 1                  |
+| purchase_date | date    | Date of purchase                                 | "2024-09-20"       |
+| notes         | text    | Free text notes                                  | "Replaced RAM 2025"|
+| created_at    | datetime| Record creation timestamp                        | "2025-06-17 10:15" |
+| updated_at    | datetime| Last update timestamp                            | "2025-06-17 10:15" |
+
+---
+
+## 6. software_assets
+
+| Column             | Type    | Description                                 | Example               |
+|--------------------|---------|---------------------------------------------|-----------------------|
+| id                 | int     | Primary key                                 | 1                     |
+| name               | string  | Name of the software                        | "Windows 11 Pro"      |
+| version            | string  | Version                                     | "22H2"                |
+| license_key        | string  | License key                                 | "XXXXX-XXXXX-XXXXX"   |
+| hardware_id        | int     | FK to hardware_assets.id (assigned hardware)| 1                     |
+| status_id          | int     | FK to statuses.id                           | 1                     |
+| notes              | text    | Free text notes                             | "License valid until 2026" |
+| created_at         | datetime| Record creation timestamp                   | "2025-06-17 10:20"    |
+| updated_at         | datetime| Last update timestamp                       | "2025-06-17 10:20"    |
+
+---
+
+## 7. didactic_assets
+
+| Column        | Type    | Description                                   | Example              |
+|---------------|---------|-----------------------------------------------|----------------------|
+| id            | int     | Primary key                                   | 1                    |
+| name          | string  | Asset name                                    | "Epson Projector"    |
+| type          | string  | Didactic asset type                           | "Projector"          |
+| serial_number | string  | Serial number                                 | "PJ123456789"        |
+| location_id   | int     | FK to locations.id                            | 2                    |
+| status_id     | int     | FK to statuses.id                             | 1                    |
+| purchase_date | date    | Date of purchase                              | "2023-04-15"         |
+| notes         | text    | Free text notes                               | "Lamp replaced 2024" |
+| created_at    | datetime| Record creation timestamp                     | "2025-06-17 10:21"   |
+| updated_at    | datetime| Last update timestamp                         | "2025-06-17 10:21"   |
+
+---
+
+## 8. asset_images
+
+| Column      | Type    | Description                              | Example                   |
+|-------------|---------|------------------------------------------|---------------------------|
+| id          | int     | Primary key                              | 1                         |
+| asset_type  | string  | Type: 'hardware', 'software', 'didactic' | "hardware"                |
+| asset_id    | int     | FK to asset table                        | 1                         |
+| url         | string  | Image or document URL/path               | "/images/assets/1-1.jpg"  |
+| uploaded_at | datetime| Upload timestamp                         | "2025-06-17 10:30"        |
+
+---
+
+## 9. maintenance_logs
+
+| Column           | Type    | Description                              | Example                      |
+|------------------|---------|------------------------------------------|------------------------------|
+| id               | int     | Primary key                              | 1                            |
+| asset_type       | string  | 'hardware', 'software', 'didactic'       | "hardware"                   |
+| asset_id         | int     | FK to asset table                        | 1                            |
+| user_id          | int     | FK to users.id (who performed/recorded)  | 2                            |
+| maintenance_date | date    | Date maintenance was performed           | "2025-05-10"                 |
+| type             | string  | Type of maintenance ("preventive", "corrective") | "preventive"         |
+| description      | text    | Maintenance notes                        | "Cleaned dust filters"       |
+| created_at       | datetime| Record creation timestamp                | "2025-06-17 10:33"           |
+
+---
+
+# Example Data Row
+
+Here’s a sample row for each table (shown as a JSON object for illustration):
 
 **users**
-- id (PK)
-- name
-- email (unique)
-- password (hashed)
-- role_id (FK → roles.id)
-- department_id (FK → departments.id, nullable)
-- status
-- created_at, updated_at
-
+```json
+{
+  "id": 1,
+  "name": "Alice Smith",
+  "email": "alice@isla.pt",
+  "password": "$2y$10$abc...",
+  "role_id": 2,
+  "created_at": "2025-06-17 10:15:00",
+  "updated_at": "2025-06-17 10:15:00"
+}
+```
 **roles**
-- id (PK)
-- name
-- description
-
-**departments**
-- id (PK)
-- name
-- description
-
----
-
-### 2. Locations and Suppliers
-
+```json
+{
+  "id": 2,
+  "name": "it_staff"
+}
+```
 **locations**
-- id (PK)
-- name
-- department_id (FK → departments.id, nullable)
-- description
-
-**suppliers**
-- id (PK)
-- name
-- contact_name
-- contact_email
-- phone
-- address
-- notes
-
----
-
-### 3. Assets
-
+```json
+{
+  "id": 1,
+  "name": "Lab 1.01",
+  "description": "Computer lab near entrance"
+}
+```
+**statuses**
+```json
+{
+  "id": 1,
+  "name": "in use"
+}
+```
 **hardware_assets**
-- id (PK)
-- name
-- type (e.g., Laptop, Printer)
-- brand
-- model
-- serial_number
-- asset_tag_id (FK → asset_tags.id)
-- location_id (FK → locations.id)
-- department_id (FK → departments.id, nullable)
-- purchase_date
-- warranty_id (FK → warranties.id, nullable)
-- supplier_id (FK → suppliers.id, nullable)
-- status (in use, in stock, broken, etc.)
-- notes
-- created_at, updated_at
-
+```json
+{
+  "id": 1,
+  "name": "PC - Front Desk",
+  "type": "Desktop",
+  "brand": "Dell",
+  "model": "OptiPlex 3080",
+  "serial_number": "SN12345678",
+  "location_id": 1,
+  "status_id": 1,
+  "purchase_date": "2024-09-20",
+  "notes": "Replaced RAM 2025",
+  "created_at": "2025-06-17 10:15:00",
+  "updated_at": "2025-06-17 10:15:00"
+}
+```
 **software_assets**
-- id (PK)
-- name
-- version
-- license_key
-- supplier_id (FK → suppliers.id, nullable)
-- purchase_date
-- valid_until
-- assigned_to_hardware_id (FK → hardware_assets.id, nullable)
-- status (active, expired, etc.)
-- notes
-- created_at, updated_at
-
+```json
+{
+  "id": 1,
+  "name": "Windows 11 Pro",
+  "version": "22H2",
+  "license_key": "XXXXX-XXXXX-XXXXX",
+  "hardware_id": 1,
+  "status_id": 1,
+  "notes": "License valid until 2026",
+  "created_at": "2025-06-17 10:20:00",
+  "updated_at": "2025-06-17 10:20:00"
+}
+```
 **didactic_assets**
-- id (PK)
-- name
-- type (e.g., Projector, Kit)
-- brand
-- model
-- serial_number
-- asset_tag_id (FK → asset_tags.id)
-- location_id (FK → locations.id)
-- department_id (FK → departments.id, nullable)
-- purchase_date
-- warranty_id (FK → warranties.id, nullable)
-- supplier_id (FK → suppliers.id, nullable)
-- status
-- notes
-- created_at, updated_at
-
----
-
-### 4. Tags, Warranties, Attachments
-
-**asset_tags**
-- id (PK)
-- code (unique)
-- qr_code_url
-- created_at
-
-**warranties**
-- id (PK)
-- warranty_number
-- supplier_id (FK → suppliers.id, nullable)
-- start_date
-- end_date
-- terms
-- file_url
-
-**asset_photos**
-- id (PK)
-- asset_type (hardware, software, didactic)
-- asset_id (id of the asset)
-- file_url
-- uploaded_by (FK → users.id)
-- uploaded_at
-
----
-
-### 5. Maintenance, Assignments, Logs
-
+```json
+{
+  "id": 1,
+  "name": "Epson Projector",
+  "type": "Projector",
+  "serial_number": "PJ123456789",
+  "location_id": 2,
+  "status_id": 1,
+  "purchase_date": "2023-04-15",
+  "notes": "Lamp replaced 2024",
+  "created_at": "2025-06-17 10:21:00",
+  "updated_at": "2025-06-17 10:21:00"
+}
+```
+**asset_images**
+```json
+{
+  "id": 1,
+  "asset_type": "hardware",
+  "asset_id": 1,
+  "url": "/images/assets/1-1.jpg",
+  "uploaded_at": "2025-06-17 10:30:00"
+}
+```
 **maintenance_logs**
-- id (PK)
-- asset_type (hardware, software, didactic)
-- asset_id (id of the asset)
-- maintenance_type (preventive, corrective, etc.)
-- description
-- maintenance_date
-- performed_by (FK → users.id)
-- status (pending, done, etc.)
-- created_at
-
-**asset_assignments**
-- id (PK)
-- asset_type (hardware, software, didactic)
-- asset_id (id of the asset)
-- assigned_to_user_id (FK → users.id, nullable)
-- assigned_to_location_id (FK → locations.id, nullable)
-- assigned_date
-- returned_date
-- status
-- notes
-
-**logs**
-- id (PK)
-- user_id (FK → users.id)
-- action (e.g., create, update, delete)
-- table_name
-- record_id
-- description
-- created_at
-
-**notifications**
-- id (PK)
-- user_id (FK → users.id)
-- type
-- message
-- is_read (boolean)
-- created_at
+```json
+{
+  "id": 1,
+  "asset_type": "hardware",
+  "asset_id": 1,
+  "user_id": 2,
+  "maintenance_date": "2025-05-10",
+  "type": "preventive",
+  "description": "Cleaned dust filters",
+  "created_at": "2025-06-17 10:33:00"
+}
+```
 
 ---
 
-## Relationships & Design Rationale
+# Relationships
 
-- **Separation by asset type** (hardware, software, didactic): allows specific fields per asset and easier expansion in the future.
-- **asset_type + asset_id** pattern: enables maintenance, attachments, and assignments to be linked to any asset type in a clean, scalable way.
-- **Attachments are not inline fields**; instead, they are stored in a separate table and can be linked to any asset (for storing multiple images/docs per asset).
-- **Departments** and **locations**: allow both physical (room, building) and organizational (department, area) tracking.
-- **Suppliers** and **warranties**: centralized, so you can track supplier contact, warranty periods, and attach scanned files.
-- **Asset tags**: for physical labeling and inventory (QR/barcode).
-- **Asset assignments**: enables tracking the history of where/with whom an asset is at any time.
-- **Maintenance logs**: full service/repair history for compliance, warranties, and audits.
-- **Logs and notifications**: for accountability, security, and user engagement.
+- **users.role_id** → **roles.id**
+- **hardware_assets.location_id**, **didactic_assets.location_id** → **locations.id**
+- **hardware_assets.status_id**, **software_assets.status_id**, **didactic_assets.status_id** → **statuses.id**
+- **software_assets.hardware_id** → **hardware_assets.id**
+- **asset_images.asset_type/asset_id**: points to a row in the respective asset table
+- **maintenance_logs.asset_type/asset_id**: points to a row in the respective asset table
+- **maintenance_logs.user_id** → **users.id**
 
 ---
 
-## Example Usage Scenarios
+# Notes
 
-- **A laptop is purchased:**  
-  Entered as a `hardware_asset`, linked to a location, supplier, warranty, and asset tag.
-- **Windows license for the laptop:**  
-  Entered as a `software_asset`, assigned to the laptop, with license details and supplier.
-- **A projector (didactic asset):**  
-  Tracked in `didactic_assets` with location, tag, and optional warranty.
-- **Photos/scans:**  
-  Attach invoice/photo via `asset_photos` (linked by asset type/id).
-- **Maintenance:**  
-  Any asset can have maintenance logs, performed by a user.
-- **Movement:**  
-  Use `asset_assignments` to track when assets change rooms/users.
+- This schema is normalized and ready for use in any RDBMS, including SQLite (with Laravel support).
+- The asset_type/asset_id pattern for images and maintenance logs allows flexibility to attach records to any asset type.
+- Statuses are controlled via a dedicated table for consistency.
+- “Didactic assets” are separate for clarity, as you requested.
 
 ---
 
-## Extending the System
-
-This schema is modular and can be expanded easily:
-- Add more asset types (e.g., vehicles, furniture) using the same asset_type/asset_id approach.
-- Add more fields or relationships as needed (e.g., custom fields per asset type).
-- Integrate with authentication/authorization (e.g., Laravel Sanctum, OAuth).
-- Automate notifications (e.g., warranty expiring, scheduled maintenance).
-
----
-
-## Diagram
-
-*Attach the ERD diagram exported from drawSQL or another tool here.*
-
----
-
-## Conclusion
-
-This schema enables complete, auditable IT asset management for schools and universities, supporting all major needs: asset registry, maintenance, movement, attachments, and user roles.  
-For implementation, create migrations for each table following the above structure and set up foreign keys for data integrity.
-
-If you need the Laravel migration files for this schema, ask and they can be generated for you!
-
-## Entity-Relationship Diagram
-
-*Insert your exported drawSQL diagram image here!*
+If you need a visual ER diagram or want to proceed with migrations, just ask!
