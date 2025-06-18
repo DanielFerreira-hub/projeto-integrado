@@ -1,6 +1,6 @@
 # ISLA IT Asset Management – Database Schema Documentation
 
-This document describes the database schema for the ISLA IT Asset Management system, including tables, columns, example values, and all relationships, including polymorphic ones such as asset images and maintenance logs.
+This document details the database schema for the ISLA IT Asset Management system, including tables, columns, example values, and all relationships. It also provides guidance for visualizing these relationships in ER diagrams (e.g., SmartDraw).
 
 ---
 
@@ -107,7 +107,7 @@ Common values: "in use", "in stock", "maintenance", "retired", "lost"
 | Column      | Type      | Description                                   | Example                    |
 |-------------|-----------|-----------------------------------------------|----------------------------|
 | id          | int       | Primary key                                   | 1                          |
-| asset_type  | varchar   | Type: 'hardware', 'software', 'didactic'      | "hardware"                 |
+| asset_type  | varchar   | 'hardware', 'software', or 'didactic'         | "hardware"                 |
 | asset_id    | int       | Corresponding asset's id                      | 1                          |
 | url         | varchar   | Image or document URL/path                    | "/images/assets/1-1.jpg"   |
 | uploaded_at | datetime  | Upload timestamp                              | "2025-06-17 10:30"         |
@@ -122,7 +122,7 @@ Common values: "in use", "in stock", "maintenance", "retired", "lost"
 | Column           | Type      | Description                                 | Example                      |
 |------------------|-----------|---------------------------------------------|------------------------------|
 | id               | int       | Primary key                                 | 1                            |
-| asset_type       | varchar   | 'hardware', 'software', 'didactic'          | "hardware"                   |
+| asset_type       | varchar   | 'hardware', 'software', or 'didactic'       | "hardware"                   |
 | asset_id         | int       | Corresponding asset's id                    | 1                            |
 | user_id          | int       | FK to users.id (who did/performed the log)  | 2                            |
 | maintenance_date | date      | Date of maintenance                         | "2025-05-10"                 |
@@ -167,16 +167,6 @@ Common values: "in use", "in stock", "maintenance", "retired", "lost"
 If an image is for a didactic asset, use  
 - `asset_type = "didactic"`
 - `asset_id = [id of row in didactic_assets]`
-
----
-
-## Diagram Representation (drawSQL)
-
-- Connect all direct FKs with solid lines.
-- For `software_assets.hardware_id`, draw a solid FK line to `hardware_assets.id`.
-- For `maintenance_logs` and `asset_images`, draw **dashed lines** to each of the three asset tables (`hardware_assets`, `software_assets`, `didactic_assets`) and label as **"polymorphic reference"**.
-- Add a note to both `maintenance_logs` and `asset_images` tables:  
-  *"Polymorphic reference: asset_type + asset_id → hardware_assets, software_assets, or didactic_assets"*
 
 ---
 
@@ -288,15 +278,58 @@ If an image is for a didactic asset, use
 
 ---
 
-## Notes
+## Diagramming Instructions for SmartDraw
 
-- This schema is fully normalized and suitable for use in SQLite or any SQL RDBMS.
-- Polymorphic references are handled at the application level; the database cannot enforce these directly.
-- You can copy the DBML (see below) to import this structure into drawSQL.
+To create clear and professional database diagrams in SmartDraw:
+
+### **Diagram #1: Main Entity-Relationship Diagram (ERD)**
+
+- **Create a box for each table** (`users`, `roles`, `locations`, `statuses`, `hardware_assets`, `software_assets`, `didactic_assets`, `asset_images`, `maintenance_logs`).
+- **List the columns** in each table inside the box.
+- **Draw solid lines for direct foreign keys**:
+    - users.role_id → roles.id
+    - didactic_assets.location_id → locations.id
+    - didactic_assets.status_id → statuses.id
+    - hardware_assets.location_id → locations.id
+    - hardware_assets.status_id → statuses.id
+    - software_assets.status_id → statuses.id
+    - software_assets.hardware_id → hardware_assets.id
+    - maintenance_logs.user_id → users.id
+- **Draw dashed or colored lines for polymorphic relations**:
+    - From `maintenance_logs` and `asset_images` to each of `hardware_assets`, `software_assets`, and `didactic_assets`
+    - Label these lines as “polymorphic reference: asset_type + asset_id”
+- **(Optional) Add notes/legends** explaining what a polymorphic reference is.
+
+### **Diagram #2: Asset Tables Detail**
+
+- **Show just the three asset tables** (`hardware_assets`, `software_assets`, `didactic_assets`) and how `software_assets` connects to `hardware_assets`.
+- **Show their connections to `locations` and `statuses`.**
+- **Show example rows (optional)** under each table.
+
+### **Diagram #3: Polymorphic Relationships Only**
+
+- **Focus on `asset_images` and `maintenance_logs`**.
+- **Show all three possible asset tables they can point to**.
+- **Highlight the polymorphic relationship fields**.
 
 ---
 
-## DBML for drawSQL Import
+### **How to do this in SmartDraw**
+
+1. Create a new ERD or "Database Diagram".
+2. For each table:
+    - Add a rectangle/box.
+    - Title it with the table name.
+    - List each column (mark PKs and FKs).
+3. Draw solid lines for direct FKs (add a label if needed, e.g.: “FK”).
+4. Draw dashed or colored lines from `asset_images` and `maintenance_logs` to each asset table.
+    - Label them as “polymorphic (asset_type + asset_id)”.
+5. Add a small legend or note explaining polymorphic references.
+6. Group the diagrams as needed (main ERD, assets detail, polymorphic detail).
+
+---
+
+## DBML for Reference
 
 ```dbml
 Table users {
@@ -388,3 +421,5 @@ Table maintenance_logs {
 ```
 
 ---
+
+If you want to switch away from polymorphic to separate tables, just say so—I’ll rewrite the schema and instructions!
