@@ -388,5 +388,3 @@ Table maintenance_logs {
 ```
 
 ---
-
-If you have further customizations or want to see how this would translate into Laravel migrations, just let me know!
