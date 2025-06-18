@@ -1,19 +1,21 @@
-## Project: ISLA IT Asset Management
+# Project: ISLA IT Asset Management
 
-### Description
+## Description
 This project is a web-based system for managing the IT assets of ISLA-IPGT. It enables efficient tracking of hardware, software, and educational equipment to streamline inventory management and maintenance.
 
 ---
 
-### Features
-- **Asset Tracking:** Manage and monitor IT assets, including hardware and software.
+## Features
+- **Asset Tracking:** Manage and monitor IT assets, including hardware, software, and didactic equipment.
 - **User Management:** Assign roles and permissions for different user levels (Admin, Technician).
+- **Maintenance Logging:** Track and attach maintenance actions to any asset type.
+- **Image/Document Attachment:** Upload photos or documents for any asset.
 - **Reports & Insights:** Generate reports on asset status and utilization.
 - **Search & Filtering:** Easily find and filter assets based on various criteria.
 
 ---
 
-### Technologies Used
+## Technologies Used
 - **Frontend:** React.js
 - **Backend:** Laravel (JWT Authentication)
 - **Database:** MariaDB/MySQL
@@ -21,8 +23,8 @@ This project is a web-based system for managing the IT assets of ISLA-IPGT. It e
 
 ---
 
-### Repository Structure
-- `/docs` - Project documentation
+## Repository Structure
+- `/docs` - Project documentation (includes database schema)
 - `/frontend` - React.js application
 - `/backend` - Laravel API
 - `.env.example` - Example environment configuration
@@ -42,6 +44,7 @@ This project is a web-based system for managing the IT assets of ISLA-IPGT. It e
 ### 2. **Database Setup**
 - [ ] Open Beekeeper/DBeaver and create a database called `isla_asset_management` (or your preferred name).
 - [ ] Note your DB username and password for use in the backend configuration.
+- [ ] See `/docs/database_schema.md` for the full schema and ER diagram guidelines.
 
 ---
 
@@ -69,12 +72,15 @@ This project is a web-based system for managing the IT assets of ISLA-IPGT. It e
 ---
 
 ### 4. **Backend Development Workflow**
-- [ ] Design your database schema (write or update migrations for: users, equipment, locations, maintenance, etc.)
+- [ ] Design your database schema (write or update migrations for: users, assets, locations, statuses, maintenance, etc.).
 - [ ] Implement Models, Controllers, and Routes for:
     - Users (with roles)
-    - Equipment
+    - Hardware, Software, and Didactic Equipment
     - Locations
-    - Maintenance logs
+    - Statuses
+    - Maintenance logs (polymorphic relation)
+    - Asset images/documents (polymorphic relation)
+- [ ] Use Eloquent's [polymorphic relationships](https://laravel.com/docs/eloquent-relationships#polymorphic-relationships) for images and maintenance logs.
 - [ ] Protect routes using JWT authentication and role middleware.
 - [ ] Test all endpoints using Insomnia.
 - [ ] Document your API endpoints in `/docs/api.md`.
@@ -96,9 +102,11 @@ This project is a web-based system for managing the IT assets of ISLA-IPGT. It e
 - [ ] Build authentication pages (login, session management with JWT).
 - [ ] Build pages for CRUD operations:  
     - Users (admin only)
-    - Equipment
+    - Hardware, Software, Didactic Equipment
     - Locations
-    - Maintenance
+    - Statuses
+    - Maintenance logs
+    - Asset images/documents
 - [ ] Implement role-based access (hide/show navigation based on user role).
 - [ ] Polish UI with your chosen UI library (Material UI, Bootstrap, etc.).
 - [ ] Ensure all user flows are tested and functional.
@@ -107,7 +115,7 @@ This project is a web-based system for managing the IT assets of ISLA-IPGT. It e
 
 ### 7. **Documentation**
 - [ ] Keep `/docs/api.md` updated with all available endpoints and usage.
-- [ ] Add a database schema diagram (ERD) to `/docs/` if possible.
+- [ ] Add a database schema diagram (ERD) to `/docs/` (see below for guidance).
 - [ ] Update this README.md if setup steps change.
 
 ---
@@ -124,8 +132,19 @@ This project is a web-based system for managing the IT assets of ISLA-IPGT. It e
 
 | Role      | Permissions                                                               |
 |-----------|--------------------------------------------------------------------------|
-| Admin     | Full access: manage users, assets, locations, maintenance, view reports   |
-| Technician| Manage/view assets, locations, maintenance. Cannot manage users           |
+| Admin     | Full access: manage users, assets, locations, statuses, maintenance, view reports   |
+| Technician| Manage/view assets, locations, statuses, maintenance. Cannot manage users           |
+
+---
+
+## Database Schema & ER Diagrams
+
+- The full schema and sample data are in [`/docs/database_schema.md`](docs/database_schema.md).
+- **ER Diagram Guidance:**  
+  - Draw all tables and their columns.
+  - Use solid lines for direct foreign keys.
+  - Use dashed or colored lines for polymorphic links from `asset_images` and `maintenance_logs` to each asset table, labeled "polymorphic reference".
+  - Add a legend or note explaining the polymorphic relationship.
 
 ---
 
