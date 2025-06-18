@@ -150,6 +150,6 @@ This project is a web-based system for managing the IT assets of ISLA-IPGT. It e
 
 ## Contact
 
-For questions or help, contact [your-email@domain.com].
+For questions or help, contact [df.danielferreira07@gmail.com].
 
 ---
