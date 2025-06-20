@@ -314,18 +314,9 @@ To create clear and professional database diagrams in SmartDraw:
 
 ---
 
-### **How to do this in SmartDraw**
+### **Database Diagram**
 
-1. Create a new ERD or "Database Diagram".
-2. For each table:
-    - Add a rectangle/box.
-    - Title it with the table name.
-    - List each column (mark PKs and FKs).
-3. Draw solid lines for direct FKs (add a label if needed, e.g.: “FK”).
-4. Draw dashed or colored lines from `asset_images` and `maintenance_logs` to each asset table.
-    - Label them as “polymorphic (asset_type + asset_id)”.
-5. Add a small legend or note explaining polymorphic references.
-6. Group the diagrams as needed (main ERD, assets detail, polymorphic detail).
+Fazer
 
 ---
 
@@ -421,5 +412,3 @@ Table maintenance_logs {
 ```
 
 ---
-
-If you want to switch away from polymorphic to separate tables, just say so—I’ll rewrite the schema and instructions!
