@@ -1,6 +1,6 @@
 # ISLA IT Asset Management – Database Schema Documentation
 
-This document details the database schema for the ISLA IT Asset Management system, including tables, columns, example values, and all relationships. It also provides guidance for visualizing these relationships in ER diagrams (e.g., SmartDraw).
+This document details the database schema for the ISLA IT Asset Management system, including tables, columns, example values, and all relationships.
 
 ---
 
