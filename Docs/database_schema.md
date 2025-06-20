@@ -15,8 +15,12 @@ This document details the database schema for the ISLA IT Asset Management syste
 | email       | varchar   | User's email address (unique)      | "alice@isla.pt"        |
 | password    | varchar   | Password hash                      | "$2y$10$abc..."        |
 | role_id     | int       | FK to roles.id                     | 2                      |
-| created_at  | datetime  | Record creation timestamp          | "2025-06-17 10:15:00"  |
-| updated_at  | datetime  | Last update timestamp              | "2025-06-17 10:15:00"  |
+| created_at  | datetime  | Record creation timestamp (auto)   | "2025-06-17 10:15:00"  |
+| updated_at  | datetime  | Last update timestamp (auto)       | "2025-06-17 10:15:00"  |
+
+**Constraints:**
+- `email` is unique and required (NOT NULL)
+- `role_id` is required (NOT NULL)
 
 ---
 
@@ -24,8 +28,11 @@ This document details the database schema for the ISLA IT Asset Management syste
 
 | Column | Type    | Description | Example     |
 |--------|---------|-------------|-------------|
-| id     | int     | Primary key | 1           |
-| name   | varchar | Role name   | "admin"     |
+| id     | int     | Primary key, auto-increment | 1           |
+| name   | varchar | Role name (unique)   | "admin"     |
+
+**Constraints:**
+- `name` is unique and required (NOT NULL)
 
 ---
 
@@ -33,9 +40,12 @@ This document details the database schema for the ISLA IT Asset Management syste
 
 | Column      | Type    | Description            | Example          |
 |-------------|---------|------------------------|------------------|
-| id          | int     | Primary key            | 1                |
-| name        | varchar | Location/room name     | "Lab 1.01"       |
+| id          | int     | Primary key, auto-increment | 1                |
+| name        | varchar | Location/room name (unique) | "Lab 1.01"       |
 | description | varchar | Details (optional)     | "Computer lab"   |
+
+**Constraints:**
+- `name` is unique and required (NOT NULL)
 
 ---
 
@@ -43,10 +53,12 @@ This document details the database schema for the ISLA IT Asset Management syste
 
 | Column | Type    | Description          | Example         |
 |--------|---------|----------------------|-----------------|
-| id     | int     | Primary key          | 1               |
-| name   | varchar | Asset status         | "in use"        |
+| id     | int     | Primary key, auto-increment | 1               |
+| name   | varchar | Asset status (unique) | "in use"        |
 
-Common values: "in use", "in stock", "maintenance", "retired", "lost"
+**Constraints:**
+- `name` is unique and required (NOT NULL)
+- Common values: "in use", "in stock", "maintenance", "retired", "lost"
 
 ---
 
@@ -54,18 +66,22 @@ Common values: "in use", "in stock", "maintenance", "retired", "lost"
 
 | Column        | Type      | Description                                     | Example           |
 |---------------|-----------|-------------------------------------------------|-------------------|
-| id            | int       | Primary key                                     | 1                 |
-| name          | varchar   | Asset name                                      | "PC - Front Desk" |
+| id            | int       | Primary key, auto-increment                     | 1                 |
+| name          | varchar   | Asset name (required)                           | "PC - Front Desk" |
 | type          | varchar   | Type of hardware                                | "Desktop"         |
 | brand         | varchar   | Brand                                           | "Dell"            |
 | model         | varchar   | Model                                           | "OptiPlex 3080"   |
 | serial_number | varchar   | Serial number                                   | "SN12345678"      |
-| location_id   | int       | FK to locations.id                              | 1                 |
-| status_id     | int       | FK to statuses.id                               | 1                 |
+| location_id   | int       | FK to locations.id (required)                   | 1                 |
+| status_id     | int       | FK to statuses.id (required)                    | 1                 |
 | purchase_date | date      | Purchase date                                   | "2024-09-20"      |
-| notes         | text      | Free notes                                      | "Replaced RAM"    |
-| created_at    | datetime  | Record creation time                            | "2025-06-17 10:15"|
-| updated_at    | datetime  | Last update time                                | "2025-06-17 10:15"|
+| notes         | text      | Free notes (optional)                           | "Replaced RAM"    |
+| created_at    | datetime  | Record creation time (auto)                     | "2025-06-17 10:15"|
+| updated_at    | datetime  | Last update time (auto)                         | "2025-06-17 10:15"|
+
+**Constraints:**
+- `name`, `location_id`, `status_id` are required (NOT NULL)
+- `serial_number` is recommended to be unique if used
 
 ---
 
@@ -73,15 +89,19 @@ Common values: "in use", "in stock", "maintenance", "retired", "lost"
 
 | Column        | Type      | Description                                    | Example                 |
 |---------------|-----------|------------------------------------------------|-------------------------|
-| id            | int       | Primary key                                    | 1                       |
-| name          | varchar   | Software name                                  | "Windows 11 Pro"        |
-| version       | varchar   | Version                                        | "22H2"                  |
+| id            | int       | Primary key, auto-increment                    | 1                       |
+| name          | varchar   | Software name (required)                       | "Windows 11 Pro"        |
+| version       | varchar   | Version (required)                             | "22H2"                  |
 | license_key   | varchar   | License key                                    | "XXXXX-XXXXX-XXXXX"     |
 | hardware_id   | int       | FK to hardware_assets.id (assigned hardware)   | 1                       |
-| status_id     | int       | FK to statuses.id                              | 1                       |
-| notes         | text      | Free notes                                     | "License valid 2026"    |
-| created_at    | datetime  | Record creation time                           | "2025-06-17 10:20"      |
-| updated_at    | datetime  | Last update time                               | "2025-06-17 10:20"      |
+| status_id     | int       | FK to statuses.id (required)                   | 1                       |
+| notes         | text      | Free notes (optional)                          | "License valid 2026"    |
+| created_at    | datetime  | Record creation time (auto)                    | "2025-06-17 10:20"      |
+| updated_at    | datetime  | Last update time (auto)                        | "2025-06-17 10:20"      |
+
+**Constraints:**
+- `name`, `version`, `status_id` are required (NOT NULL)
+- `hardware_id` can be NULL if not assigned to hardware
 
 ---
 
@@ -89,16 +109,20 @@ Common values: "in use", "in stock", "maintenance", "retired", "lost"
 
 | Column        | Type      | Description                                 | Example                 |
 |---------------|-----------|---------------------------------------------|-------------------------|
-| id            | int       | Primary key                                 | 1                       |
-| name          | varchar   | Asset name                                  | "Epson Projector"       |
+| id            | int       | Primary key, auto-increment                 | 1                       |
+| name          | varchar   | Asset name (required)                       | "Epson Projector"       |
 | type          | varchar   | Didactic asset type                         | "Projector"             |
 | serial_number | varchar   | Serial number                               | "PJ123456789"           |
-| location_id   | int       | FK to locations.id                          | 2                       |
-| status_id     | int       | FK to statuses.id                           | 1                       |
+| location_id   | int       | FK to locations.id (required)               | 2                       |
+| status_id     | int       | FK to statuses.id (required)                | 1                       |
 | purchase_date | date      | Purchase date                               | "2023-04-15"            |
-| notes         | text      | Free notes                                  | "Lamp replaced 2024"    |
-| created_at    | datetime  | Record creation time                        | "2025-06-17 10:21"      |
-| updated_at    | datetime  | Last update time                            | "2025-06-17 10:21"      |
+| notes         | text      | Free notes (optional)                       | "Lamp replaced 2024"    |
+| created_at    | datetime  | Record creation time (auto)                 | "2025-06-17 10:21"      |
+| updated_at    | datetime  | Last update time (auto)                     | "2025-06-17 10:21"      |
+
+**Constraints:**
+- `name`, `location_id`, `status_id` are required (NOT NULL)
+- `serial_number` is recommended to be unique if used
 
 ---
 
@@ -106,14 +130,19 @@ Common values: "in use", "in stock", "maintenance", "retired", "lost"
 
 | Column      | Type      | Description                                   | Example                    |
 |-------------|-----------|-----------------------------------------------|----------------------------|
-| id          | int       | Primary key                                   | 1                          |
+| id          | int       | Primary key, auto-increment                   | 1                          |
 | asset_type  | varchar   | 'hardware', 'software', or 'didactic'         | "hardware"                 |
 | asset_id    | int       | Corresponding asset's id                      | 1                          |
-| url         | varchar   | Image or document URL/path                    | "/images/assets/1-1.jpg"   |
-| uploaded_at | datetime  | Upload timestamp                              | "2025-06-17 10:30"         |
+| url         | varchar   | Image or document URL/path (required)         | "/images/assets/1-1.jpg"   |
+| uploaded_at | datetime  | Upload timestamp (auto)                       | "2025-06-17 10:30"         |
 
 **Polymorphic relationship:**  
 `asset_type` + `asset_id` together reference a row in `hardware_assets`, `software_assets`, or `didactic_assets`.
+
+**Constraints:**
+- `asset_type` should be ENUM('hardware','software','didactic') if supported
+- `asset_id` is required (NOT NULL)
+- `url` is required (NOT NULL)
 
 ---
 
@@ -121,17 +150,22 @@ Common values: "in use", "in stock", "maintenance", "retired", "lost"
 
 | Column           | Type      | Description                                 | Example                      |
 |------------------|-----------|---------------------------------------------|------------------------------|
-| id               | int       | Primary key                                 | 1                            |
+| id               | int       | Primary key, auto-increment                 | 1                            |
 | asset_type       | varchar   | 'hardware', 'software', or 'didactic'       | "hardware"                   |
 | asset_id         | int       | Corresponding asset's id                    | 1                            |
 | user_id          | int       | FK to users.id (who did/performed the log)  | 2                            |
 | maintenance_date | date      | Date of maintenance                         | "2025-05-10"                 |
 | type             | varchar   | Maintenance type ("preventive", "corrective")| "preventive"                |
 | description      | text      | Maintenance notes                           | "Cleaned dust filters"       |
-| created_at       | datetime  | Record creation timestamp                   | "2025-06-17 10:33"           |
+| created_at       | datetime  | Record creation timestamp (auto)            | "2025-06-17 10:33"           |
 
 **Polymorphic relationship:**  
 `asset_type` + `asset_id` together reference a row in `hardware_assets`, `software_assets`, or `didactic_assets`.
+
+**Constraints:**
+- `asset_type` should be ENUM('hardware','software','didactic') if supported
+- `asset_id`, `user_id` are required (NOT NULL)
+- `maintenance_date` is required (NOT NULL)
 
 ---
 
@@ -160,8 +194,9 @@ Common values: "in use", "in stock", "maintenance", "retired", "lost"
 | asset_images      | asset_type, asset_id | hardware_assets / software_assets / didactic_assets | Polymorphic  |
 
 **Note:**  
-- `asset_type` must be set as "hardware", "software", or "didactic".
+- `asset_type` must be set as 'hardware', 'software', or 'didactic'.
 - `asset_id` is the id of the respective asset in the asset table of the given type.
+- Foreign key constraints on polymorphic pairs must be enforced at the application level, not the database.
 
 **Example**:  
 If an image is for a didactic asset, use  
@@ -314,50 +349,44 @@ To create clear and professional database diagrams in SmartDraw:
 
 ---
 
-### **Database Diagram**
-
-Fazer
-
----
-
 ## DBML for Reference
 
 ```dbml
 Table users {
   id integer [pk, increment]
   name varchar
-  email varchar [unique]
+  email varchar [unique, not null]
   password varchar
-  role_id integer [ref: > roles.id]
+  role_id integer [not null, ref: > roles.id]
   created_at datetime
   updated_at datetime
 }
 
 Table roles {
   id integer [pk, increment]
-  name varchar
+  name varchar [unique, not null]
 }
 
 Table locations {
   id integer [pk, increment]
-  name varchar
+  name varchar [unique, not null]
   description varchar
 }
 
 Table statuses {
   id integer [pk, increment]
-  name varchar
+  name varchar [unique, not null]
 }
 
 Table hardware_assets {
   id integer [pk, increment]
-  name varchar
+  name varchar [not null]
   type varchar
   brand varchar
   model varchar
   serial_number varchar
-  location_id integer [ref: > locations.id]
-  status_id integer [ref: > statuses.id]
+  location_id integer [not null, ref: > locations.id]
+  status_id integer [not null, ref: > statuses.id]
   purchase_date date
   notes text
   created_at datetime
@@ -366,11 +395,11 @@ Table hardware_assets {
 
 Table software_assets {
   id integer [pk, increment]
-  name varchar
-  version varchar
+  name varchar [not null]
+  version varchar [not null]
   license_key varchar
   hardware_id integer [ref: > hardware_assets.id]
-  status_id integer [ref: > statuses.id]
+  status_id integer [not null, ref: > statuses.id]
   notes text
   created_at datetime
   updated_at datetime
@@ -378,11 +407,11 @@ Table software_assets {
 
 Table didactic_assets {
   id integer [pk, increment]
-  name varchar
+  name varchar [not null]
   type varchar
   serial_number varchar
-  location_id integer [ref: > locations.id]
-  status_id integer [ref: > statuses.id]
+  location_id integer [not null, ref: > locations.id]
+  status_id integer [not null, ref: > statuses.id]
   purchase_date date
   notes text
   created_at datetime
@@ -391,24 +420,22 @@ Table didactic_assets {
 
 Table asset_images {
   id integer [pk, increment]
-  asset_type varchar
-  asset_id integer
-  url varchar
+  asset_type varchar [not null] // ENUM('hardware','software','didactic') if possible
+  asset_id integer [not null]
+  url varchar [not null]
   uploaded_at datetime
   Note: 'Polymorphic reference: asset_type + asset_id → hardware_assets, software_assets, or didactic_assets'
 }
 
 Table maintenance_logs {
   id integer [pk, increment]
-  asset_type varchar
-  asset_id integer
-  user_id integer [ref: > users.id]
-  maintenance_date date
+  asset_type varchar [not null] // ENUM('hardware','software','didactic') if possible
+  asset_id integer [not null]
+  user_id integer [not null, ref: > users.id]
+  maintenance_date date [not null]
   type varchar
   description text
   created_at datetime
   Note: 'Polymorphic reference: asset_type + asset_id → hardware_assets, software_assets, or didactic_assets'
 }
 ```
-
----
